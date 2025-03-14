@@ -142,7 +142,7 @@ def exe_cmd(x, msg=None, redir_out=None, debug=0, run=True, log=True, fail=1, ba
     if log and log_stdio:
       if '2>&1' not in x: x = x + ' 2>&1'
       x = x + ' | tee -a ' + log_stdio
-      ret = subprocess.call(['/bin/bash', '-c', 'set -o pipefail; ' + x])
+      ret = os.system(x)
     else:
       ret = os.system(x)
   if ret != 0:
