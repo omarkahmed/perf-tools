@@ -750,7 +750,8 @@ def profile(mask, toplev_args=['mvl6', None], windows_file=None):
     if not windows_file:
       log = '%s.perf_stat%s.log' % (out, C.chop(flags.replace(' -k1', '').strip()))
       cmd = "bash -c '%s %s %s -o %s %s'" % (perf_stat_TSC(log), perf_common('stat'), track, log, r) if len(track) else '-- ' + r
-      cmd = cmd.replace('-D -1 --control=fifo:/tmp/roi','')
+      #cmd = cmd.replace('-D -1 --control=fifo:/tmp/roi','')
+      cmd = cmd.replace('-D -1 --control=fifo:/tmp/perf_mpl_fifo','')
       print(cmd)
       profile_exe(perf_common(record) + ' %s -o %s %s && %s' % (flags, perf_data, cmd, C.grep('insn|time', log)),
                   'sampling-%s%s' % (tag.upper(), C.flag2str(' on ', msg)), step)
@@ -1216,7 +1217,8 @@ def main():
   if args.delay:
     if args.delay == -1:
       if profiling(): do_info('controlled profiling using fifo')
-      do['perf-common'] += ' -D -1 --control=fifo:/tmp/roi '
+      #do['perf-common'] += ' -D -1 --control=fifo:/tmp/roi '
+      do['perf-common'] += ' -D -1 --control=fifo:/tmp/perf_mpl_fifo '
     else:
       if profiling(): do_info('delay profiling by %d seconds' % args.delay)
       do['perf-common'] += ' -D %d' % (args.delay * 1000)
